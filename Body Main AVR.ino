@@ -1,5 +1,5 @@
 /*
- Name:		Shadow_Receiver.ino
+ Name:		Body Main AVR.ino
  Created:	6/26/2017 9:06:12 PM
  Author:	hoodlum
 */
@@ -65,7 +65,7 @@ String PS3ControllerBackupFootMac = "00:07:04:EE:12:B8";  //Set to the MAC Addre
 String PS3ControllerBackupDomeMAC = "00:07:04:BB:2C:11";  //Set to the MAC Address of your BACKUP DOME controller (Optional)
 
 // 00:1A:7D:DA:71:14
-
+// 00:07:04:BB:2C:11
 
 typedef enum _enum_ioPin_Type {
 	pinHWSerialRX = 0,
@@ -89,6 +89,16 @@ typedef enum _enum_ioPin_Type {
 	pinOut_StatusLEDs = 12,       // neopixels x 4 : 1 = battery, 2 = CPU, 3 =, 4 =, 5= ,6= ,7= ,8=
 
 	pinOut_MP3SoundTx = 13,
+
+	pinA0 = A0,
+	pinA1 = A1,
+	pinA2 = A2,
+	pinA3 = A3,
+	pinA4 = A4,
+	pinA5 = A5,
+	pinA6 = A6,
+	pinIn_VoltageMonitor = A7,
+
 #endif
 
 #if defined(__AVR_ATmega1280__) || defined(__AVR_ATmega2560__)
@@ -97,11 +107,6 @@ typedef enum _enum_ioPin_Type {
 #define ESP8266MeshSerial Serial1 
 #define DomePanelController Serial1 
 #define BodyPanelController Serial3
-
-	//    pinIn_BLE_RX = 15, 
-	//    pinOut_BLE_TX = 14,  
-	//    pinIn_BLE_State = 38,
-	//    pinOut_BLE_Enable = 23,
 
 	pinOut_StatusLED = 13,
 
@@ -116,7 +121,7 @@ typedef enum _enum_ioPin_Type {
 	pin20 = 20,  // Mega SDA
 	pin21 = 21,  // Mega SCL
 
-	pinOut_StatusLEDs = 22,         // neopixels x 8 : 1 = battery, 2 = CPU, 3 = , 4 = , 5= ,6= ,7=FootNav ,8=DomeNav
+	pinOut_StatusLEDs = 22,         // neopixels x 8 : 1 = battery, 2 = CPU, 3 = , 4 = , 5 = ,6 = ,7 = FootNav Connected ,8 = DomeNav Connected
 	pinOut_MP3Sound1Tx = 23,		// R2 Sounds
 	pinOut_MP3Sound2Tx = 24,		// background music
 
@@ -125,67 +130,56 @@ typedef enum _enum_ioPin_Type {
 	pinOut_MotorDomeEnableRelay = 26,    // relay for dome
 	pinOut_MotorLeftEnableRelay = 27,    // relay for left motor
 	pinOut_MotorRightEnableRelay = 28,   // relay for right motor
-	pinOut_PowerDomeEnableRelay = 29,   // relay dome power
+	pinOut_PowerDomeEnableRelay = 29,   // relay for dome power
 
-								   //pinOut_MotorDomeControl = 30, // dome - goes to the Syren10 - simple software serial or rc servo control
-								   //pinOut_MotorDriveControl = 31, // both left and right - goes to the SaberTooth 2x32 - simple software serial
+	pin30 = 30,
+	pin31 = 31,
 
-								   pin30 = 30,
-								   pin31 = 31,
+	pin32 = 32,
+	pin33 = 33,
+	pin34 = 34,
+	pin35 = 35,
+	pin36x = 36, // not currently being passed through to sensor sheild
+	pin37x = 37, // not currently being passed through to sensor sheild
 
-								   pin32 = 32,
-								   pin33 = 33,
-								   pin34 = 34,
-								   pin35 = 35,
-								   pin36x = 36, // not currently being passed throught to sensor sheild
-								   pin37x = 37, // not currently being passed throught to sensor sheild
+	pin38 = 38,
+	pin39 = 39,
+	pin40 = 40,
+	pin41 = 41,
+	pin42 = 42,
+	pin43 = 43,
+	pin44 = 44,
+	pin45 = 45,
+	pin46 = 46,
+	pin47 = 47,
+	pin48 = 48,
+	pin49 = 49,
 
-								   pin38 = 38,
-								   pin39 = 39,
-								   pin40 = 40,
-								   pin41 = 41,
-								   pin42 = 42,
-								   pin43 = 43,
-								   pin44 = 44,
-								   pin45 = 45,
-								   pin46 = 46,
-								   pin47 = 47,
-								   pin48 = 48,
-								   pin49 = 49,
+	pin50 = 50,
+	pin51 = 51,
+	pin52 = 52,
+	pin53 = 53,
 
-								   pin50 = 50,
-								   pin51 = 51,
-								   pin52 = 52,
-								   pin53 = 53,
+	pinA0 = A0,
+	pinA1 = A1,
+	pinA2 = A2,
+	pinA3 = A3,
+	pinA4 = A4,
+	pinA5 = A5,
+	pinA6 = A6,
+	pinIn_VoltageMonitor = A7,
 
-								   pinA0 = A0,
-								   pinA1 = A1,
-								   pinA2 = A2,
-								   pinA3 = A3,
-								   pinA4 = A4,
-								   pinA5 = A5,
-								   pinA6 = A6,
-								   pinA7 = A7,
-
-								   pinA8 = A8,
-								   pinA9 = A9,
-								   pinA10 = A10,
-								   pinA11 = A11,
-								   pinA12 = A12,
-								   pinA13 = A13,
-								   pinA14 = A14,
-								   pinA15 = A15,
+	pinA8 = A8,
+	pinA9 = A9,
+	pinA10 = A10,
+	pinA11 = A11,
+	pinA12 = A12,
+	pinA13 = A13,
+	pinA14 = A14,
+	pinA15 = A15,
 #endif
 
-								   pinUNOA0 = A0,
-								   pinUNOA1 = A1,
-								   pinUNOA2 = A2,
-								   pinUNOA3 = A3,
-								   pinUNOA4 = A4,
-								   pinUNOA5 = A5,
-								   pinUNOA6 = A6,
-								   pinIn_VoltageMonitor = A7,
-								   pinEnd = 99
+	pinEnd = 99
 } ioPin_Type;
 
 
@@ -221,7 +215,7 @@ byte domeAutoSpeed = 70;     // Speed used when dome automation is active - Vali
 int time360DomeTurn = 2500;  // milliseconds for dome to complete 360 turn at domeAutoSpeed - Valid Values: 2000 - 8000 (2000 = 2 seconds)
 
 #define SHADOW_DEBUG       //uncomment this for console DEBUG output
-#define SHADOW_VERBOSE     //uncomment this for console VERBOSE output
+//#define SHADOW_VERBOSE     //uncomment this for console VERBOSE output
 
 							 // ---------------------------------------------------------------------------------------
 							 //                          MarcDuino Button Settings
@@ -2047,6 +2041,12 @@ char inputBuffer[INPUTBUFFERLEN];
 String inputString = "";                       // a string to hold incoming data
 volatile boolean stringComplete = false;       // whether the serial string is complete
 
+uint32_t currentMillis = 0;
+uint32_t lastMillis = 0;
+uint32_t loopCount;
+uint32_t fastLEDMillis = 0;
+bool wdt_ok = false;
+//int buttonStatus = 0;
 
 
 
@@ -2056,59 +2056,130 @@ volatile boolean stringComplete = false;       // whether the serial string is c
 
 
 
+//
+// Buttons 
+////////////////////////////////////////////////////////////////////////////
 
 
 
 
+//
+// some self explanatory defines
+//
+#define debounceDelay 20
+#define DCgap 150               // max ms between clicks for a double click event
+#define holdTime 1000           // ms hold period: how long to wait for hold event
+#define longHoldTime 2000       // ms long hold period: how long to wait for longhold event
+
+#define FOOTSHIFT 64
+#define DOMESHIFT 0
 
 
+//
+// helper macros
+//
 #define ARRAY_SIZE(A) (sizeof(A) / sizeof((A)[0]))
+#define PSNAVFOOT_UID(A) psNavFoot_##A = A + FOOTSHIFT
+#define PSNAVDOME_UID(A) psNavDome_##A = A + DOMESHIFT
 
-/*
-button[10]:0
-button[9]:16
-button[8]:6
-button[7]:8
-button[6]:10
-button[5]:13
-button[4]:14
-button[3]:1
-button[2]:2
-button[1]:0
-button[0]:3
-*/
+
 //
-// define buttons we will use and put its pin pseudonym in the list - BUTTONCOUNT will hold how many buttons in the array
+// button status, each buttons status will be one of these.
 //
-//enum { psNav_Left=0, psNav_UP, psNav_DOWN, psNav_RIGHT, psNav_CROSS, psNav_CIRCLE, psNav_L1, psNav_L2, psNav_L3, psNav_PS} idPSNavButtons;
-enum { psNav_UP=0, psNav_RIGHT, psNav_DOWN, psNav_Left, psNav_L3, psNav_L2, psNav_L1, psNav_CIRCLE, psNav_CROSS, psNav_PS} idPSNavButtons;
+typedef enum {
+
+	joyButtonNone = 0,
+	joyButtonClick,
+	joyButtonDoubleClick,
+	joyButtonHold,
+	joyButtonLongHold
+
+} joyButton_ClickType;
+
+
+//
+// all the existing buttons given unique IDs
+//
+
+enum {
+
+	PSNAVFOOT_UID(UP),
+	PSNAVFOOT_UID(RIGHT),
+	PSNAVFOOT_UID(DOWN),
+	PSNAVFOOT_UID(LEFT),
+	PSNAVFOOT_UID(L3),
+	PSNAVFOOT_UID(L2),
+	PSNAVFOOT_UID(L1),
+	PSNAVFOOT_UID(CIRCLE),
+	PSNAVFOOT_UID(CROSS),
+	PSNAVFOOT_UID(PS),
+
+	PSNAVDOME_UID(UP),
+	PSNAVDOME_UID(RIGHT),
+	PSNAVDOME_UID(DOWN),
+	PSNAVDOME_UID(LEFT),
+	PSNAVDOME_UID(L3),
+	PSNAVDOME_UID(L2),
+	PSNAVDOME_UID(L1),
+	PSNAVDOME_UID(CIRCLE),
+	PSNAVDOME_UID(CROSS),
+	PSNAVDOME_UID(PS)
+
+} navButton_UniqueIDs;
+
 
 #define BUTTONCOUNT ARRAY_SIZE(buttonIds)
-//const uint8_t buttonIds[]{ LEFT=3, UP=0, DOWN=2, RIGHT=1, CROSS=14, CIRCLE=13, L1=10, L2=8, L3=6, PS=16};
-#define FOOTSHIFT 64
-#define DOMESHIFT 64
+
+//
+// button index (lookup index) within the buttonids array
+// add or remove but they must align with the names in the buttonIds array
+// if you remove items from here then you must remove the corresponding ones from buttonIds array
+//
+//  if removing 'psDome_PS' from navButton_ArrayIndex : then remove 'PSNavDome_PS' from buttonIds array
+// 
 enum {
-	FOOT_START = UP-1 + FOOTSHIFT, FOOT_UP = UP + FOOTSHIFT, FOOT_RIGHT = RIGHT + FOOTSHIFT, FOOT_DOWN = DOWN + FOOTSHIFT, FOOT_LEFT = LEFT + FOOTSHIFT, FOOT_L3 = L3 + FOOTSHIFT, FOOT_L2 = L2 + FOOTSHIFT, FOOT_L1 = L1 + FOOTSHIFT, FOOT_CIRCLE = CIRCLE + FOOTSHIFT, FOOT_CROSS = CROSS + FOOTSHIFT, FOOT_PS = PS + FOOTSHIFT, FOOT_END,
-	DOME_START = UP-1 + DOMESHIFT, DOME_UP = UP + DOMESHIFT, DOME_RIGHT = RIGHT + DOMESHIFT, DOME_DOWN = DOWN + DOMESHIFT, DOME_LEFT = LEFT + DOMESHIFT, DOME_L3 = L3 + DOMESHIFT, DOME_L2 = L2 + DOMESHIFT, DOME_L1 = L1 + DOMESHIFT, DOME_CIRCLE = CIRCLE + DOMESHIFT, DOME_CROSS = CROSS + DOMESHIFT, DOME_PS = PS + DOMESHIFT, DOME_END
-} buttonXLATE;
-const uint8_t buttonIds[]{ 
-	FOOT_UP, FOOT_RIGHT, FOOT_DOWN, FOOT_LEFT, FOOT_L3, FOOT_L2, FOOT_L1, FOOT_CIRCLE, FOOT_CROSS, FOOT_PS,
-	DOME_UP, DOME_RIGHT, DOME_DOWN, DOME_LEFT, DOME_L3, DOME_L2, DOME_L1, DOME_CIRCLE, DOME_CROSS, DOME_PS
+
+	psFoot_UP = 0,
+	psFoot_RIGHT,
+	psFoot_DOWN,
+	psFoot_LEFT,
+	psFoot_L3,
+	psFoot_L2,
+	psFoot_L1,
+	psFoot_CIRCLE,
+	psFoot_CROSS,
+	psFoot_PS,
+
+	psDome_UP,
+	psDome_RIGHT,
+	psDome_DOWN,
+	psDome_LEFT,
+	psDome_L3,
+	psDome_L2,
+	psDome_L1,
+	psDome_CIRCLE,
+	psDome_CROSS,
+	psDome_PS
+
+} navButton_ArrayIndex;
+
+
+//
+// fill this array with the unique ids (from above) of all the buttons you want to react to
+//
+const uint8_t buttonIds[] { 
+	psNavFoot_UP, psNavFoot_RIGHT, psNavFoot_DOWN, psNavFoot_LEFT, psNavFoot_L3, psNavFoot_L2, psNavFoot_L1, psNavFoot_CIRCLE, psNavFoot_CROSS, psNavFoot_PS,
+	psNavDome_UP, psNavDome_RIGHT, psNavDome_DOWN, psNavDome_LEFT, psNavDome_L3, psNavDome_L2, psNavDome_L1, psNavDome_CIRCLE, psNavDome_CROSS, psNavDome_PS
 };
 
 //
-// Buttons status
-////////////////////////////////////////////////////////////////////////////
-#define debounceDelay 20
-#define DCgap 150               // max ms between clicks for a double click event
-#define holdTime 1000           // ms hold period: how long to wait for press+hold event
-#define longHoldTime 3000       // ms long hold period: how long to wait for press+hold event
-
+// button data structures
+//
 struct debounceButton {
 
 	int inPin = 2;
 
-	int status = 0;               // status of button, will be one of enum joyButton_Type (check this for button trigger events)
+	int status = joyButtonNone;               // status of button, will be one of enum joyButton_Type (check this for button trigger events)
 	boolean buttonVal = HIGH;   // value read from button
 	boolean buttonLast = HIGH;  // buffered value of the button's previous state
 	boolean DCwaiting = false;  // whether we're waiting for a double click (down)
@@ -2123,27 +2194,72 @@ struct debounceButton {
 
 } ;
 
-typedef enum {
+debounceButton buttonData[BUTTONCOUNT];
 
-	joyButtonNone = 0,
-	joyButtonClick,
-	joyButtonDoubleClick,
-	joyButtonHold,
-	joyButtonLongHold
+int buttonState = 0;
 
-} joyButton_Type;
+//
+// function : int buttonRefresh()
+// call this once every 50ms via main loop
+// iterates over the buttons ids array and updates 
+// input
+//   none
+//
+// output 
+//   (int) but effectivly its a true/false value - check it, if not zero then 1 or more buttons were pressed
+//
 
-debounceButton debounceButtons[BUTTONCOUNT];
+int buttonRefresh()
+{
+	for ( int i = 0; i < BUTTONCOUNT; i++ ) {
+		buttonState += (checkButton(&buttonData[i]) != 0 ? 1 : 0);
+	}
+	return buttonState;
+}
+
+//
+// function : int buttonStatus(int buttonid)
+// call (poll) this to get the status of a specific button whenever buttonRefresh() returns a non zero value.
+// inputs
+//   buttonid: button index you want to check
+//  
+// output
+//   (int) this value will be one of 5 values defined in enum joyButton_ClickType 
+//
+
+int buttonStatus(int buttonid)
+{
+	return buttonData[buttonid].status;
+}
+
+//
+// function : void buttonsInit()
+// call this in setup() - initiates the buttonData structure.
+//  
+// Inputs:
+//   none
+//
+// Outputs: 
+//	 none
+//	
+void buttonsInit()
+{
+	for ( int i = BUTTONCOUNT - 1; i >= 0; --i ) {
+		buttonData[i].inPin = buttonIds[i];
+	}
+	buttonState = 0;
+}
 
 //
 // function : int checkButton(struct debounceButton *butt)
-// Keep / update status of button configured within the passed debounceButton structure 
+//   Update status of a button configured within the passed buttonData structure 
 //
 // Inputs :
-//   an initialised debounceButton structure 
+//   An pointer to an initialised buttonData structure, specifically indexed.
+// 
 //
 // Outputs :
-//   status - the checked buttons status.
+//   status - the passed in buttons status.
 //
 //
 int checkButton(struct debounceButton *butt) {
@@ -2164,11 +2280,11 @@ int checkButton(struct debounceButton *butt) {
 	//butt->buttonVal = digitalRead(butt->inPin);
 
 	//butt->buttonVal = HIGH;
-	if (butt->inPin > FOOT_START && butt->inPin < FOOT_END) {
-		if ( PS3NavFoot->getButtonPress((ButtonEnum)(butt->inPin - FOOTSHIFT))) butt->buttonVal = LOW; else butt->buttonVal = HIGH;
+	if (butt->inPin >= FOOTSHIFT && butt->inPin < FOOTSHIFT+64) {
+		if ( PS3NavFoot->PS3NavigationConnected && PS3NavFoot->getButtonPress((ButtonEnum)(butt->inPin - FOOTSHIFT))) butt->buttonVal = LOW; else butt->buttonVal = HIGH;
 	}
 	else {
-		if ( PS3NavDome->getButtonPress((ButtonEnum)(butt->inPin - DOMESHIFT))) butt->buttonVal = LOW; else butt->buttonVal = HIGH;
+		if ( PS3NavDome->PS3NavigationConnected && PS3NavDome->getButtonPress((ButtonEnum)(butt->inPin - DOMESHIFT))) butt->buttonVal = LOW; else butt->buttonVal = HIGH;
 
 	}
 
@@ -2190,13 +2306,13 @@ int checkButton(struct debounceButton *butt) {
 	// Button released
 	else {
 		if (butt->buttonVal == HIGH && butt->buttonLast == LOW && (millis() - butt->downTime) > debounceDelay) {
-			if (not butt->ignoreUp) {
+			if (! butt->ignoreUp) {
 				butt->upTime = millis();
 				if (butt->DConUp == false) {
 					butt->DCwaiting = true;
 				}
 				else {
-					if ( not butt->holdEventPast ) {
+					if ( ! butt->holdEventPast ) {
 						butt->status = joyButtonDoubleClick;
 						butt->DConUp = false;
 						butt->DCwaiting = false;
@@ -2210,7 +2326,7 @@ int checkButton(struct debounceButton *butt) {
 				}
 			}
 			else {
-				if ( not butt->longHoldEventPast ) {
+				if ( ! butt->longHoldEventPast ) {
 					butt->status = joyButtonHold;
 				}
 			}
@@ -2226,7 +2342,7 @@ int checkButton(struct debounceButton *butt) {
 	// Test for hold
 	if (butt->buttonVal == LOW && (millis() - butt->downTime) >= holdTime) {
 		// Trigger "normal" hold
-		if (not butt->holdEventPast)
+		if (! butt->holdEventPast)
 		{
 			butt->waitForUp = true;
 			butt->ignoreUp = true;
@@ -2238,7 +2354,7 @@ int checkButton(struct debounceButton *butt) {
 		// Trigger "long" hold
 		if ((millis() - butt->downTime) >= longHoldTime)
 		{
-			if (not butt->longHoldEventPast) {
+			if (! butt->longHoldEventPast) {
 				butt->status = joyButtonLongHold;
 				butt->longHoldEventPast = true;
 			}
@@ -2255,19 +2371,117 @@ int checkButton(struct debounceButton *butt) {
 
 }
 
+
+
+long buttonMillis = 0;
+
+String joyClickNames[5] = { "None", "Click", "DoubleClick", "Hold", "LongHold" };
+
+String joyButtNames[] = { "" };
+//
+// void buttonDecoder() 
+//   check status of butone and execute functions
+//   place a call to this in loop() 
+//
+// inputs
+//   none
+//
+// outputs
+//   none
+//
+
+void buttonDecoder()
+{
+	if ( millis() - buttonMillis > 50 ) {
+
+		buttonRefresh();
+
+
+
+		//
+		// if some buttons
+		//
+		if ( buttonState != 0 ) {
+			//
+			// check which ones
+			//
+
+			int butStatus0 = 0;
+			String navString = "Foot";
+
+
+			String butString = "NONE";
+
+			butString = "LEFT";
+			
+			if ( (butStatus0 = buttonStatus(psFoot_LEFT)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "RIGHT";
+			if ( (butStatus0 = buttonStatus(psFoot_RIGHT)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "UP";
+			if ( (butStatus0 = buttonStatus(psFoot_UP))  ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "DOWN";
+			if ( (butStatus0 = buttonStatus(psFoot_DOWN))  ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "L1";
+			if ( (butStatus0 = buttonStatus(psFoot_L1)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "L2";
+			if ( (butStatus0 = buttonStatus(psFoot_L2)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "L3";
+			if ( (butStatus0 = buttonStatus(psFoot_L3))  ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "CIRCLE";
+			if ( (butStatus0 = buttonStatus(psFoot_CIRCLE)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "CROSS";
+			if ( (butStatus0 = buttonStatus(psFoot_CROSS))  ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "PS";
+			if ( (butStatus0 = buttonStatus(psFoot_PS)) ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+
+			navString = "Dome";
+
+			butString = "LEFT";
+			if (( butStatus0 = buttonStatus(psDome_LEFT)) != 0 ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "RIGHT";
+			if (( butStatus0 = buttonStatus(psDome_RIGHT)) != 0 ) Serial.println(navString + ":" + butString + ":" + joyClickNames[butStatus0]);
+
+			butString = "PS";
+
+			butStatus0 = buttonData[psDome_PS].status;
+
+			if ( butStatus0 == joyButtonClick ) {
+				Serial.println(navString + ":" + butString + ":Click");
+			}
+			else
+				if ( butStatus0 == joyButtonDoubleClick ) {
+					Serial.println(navString + ":" + butString + ":DoubleClick");
+				}
+				else
+					if ( butStatus0 == joyButtonHold ) {
+						Serial.println(navString + ":" + butString + ":Hold");
+					}
+					else
+						if ( butStatus0 == joyButtonLongHold ) {
+							Serial.println(navString + ":" + butString + ":LongHold");
+						}
+
+
+			buttonState = 0;
+		}
+		buttonMillis = millis();
+	}
+}
+
+
+
 //#endif
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // =======================================================================================
@@ -2334,16 +2548,8 @@ void setup()
 	Serial.println(" Done");
 	delay(50);
 
-
-	for (int i = BUTTONCOUNT-1; i >= 0; --i) {
-		Serial.println("button["+String(i)+"]:"+String(buttonIds[i]));
-		//Serial.print(".");
-		debounceButtons[i].inPin = buttonIds[i];
-		//pinMode(debounceButtons[i].inPin, INPUT_PULLUP);
-		//digitalWrite(debounceButtons[i].inPin, HIGH);
-	}
-
-
+	buttonsInit();
+	
 	/////////////////////////////////////////////////////////////////////////////////////////////
 	Serial.print("- i2c ");
 
@@ -2359,7 +2565,7 @@ void setup()
 	Serial.print("- Status LEDs ");
 
 	FastLED.addLeds<STATUS_LEDTYPE, pinOut_StatusLEDs, STATUS_LEDCOLORORDER>(statusLEDs, statusLED_Count).setCorrection(TypicalLEDStrip);
-	FastLED.setBrightness(128);
+	FastLED.setBrightness(192);
 
 	for (int i = 0; i < statusLED_Count; i++) {
 		// HUE / Saturation / Brightness 
@@ -2449,8 +2655,9 @@ void setup()
 
 	if (Usb.Init() == -1)
 	{
+		wdt_enable(WDTO_500MS);
 		Serial.print(F("error"));
-		while (1); //halt
+		while (1); // let watchdog help us try again
 	}
 
 	Serial.println(" Done");
@@ -2474,9 +2681,11 @@ void setup()
 
 
 	//Setup for Serial1:: Sound 
+
 #ifdef SOUND_CFSOUNDIII
 	cfSound.setup(&Serial1, 2400);
 #endif
+
 #ifdef SOUND_MP3TRIGGER
 	trigger.setup(&Serial1);
 	trigger.setVolume(vol);
@@ -2503,14 +2712,17 @@ void setup()
 	statusLEDs[statusLedIndex--] = 0; FastLED.show();
 	
 
-	// WTD is disabled here as the USB shield and bloototh dongle take longer than 500ms to startup
+	// WTD is disabled here as the USB shield and bloototh dongle take longer than 500ms to startup in main loop()
 	//////////////////////////////////
 
 	//    wdt_enable(WDTO_500MS); //enable it, and set it to 500ms
 	//    wdt_reset();
+
+
 #ifdef SOUND_MP3FLASH16P
 	mp3Trigger1.play(1);
 #endif
+
 #ifdef SOUND_WAVTRIGGER
 	Serial.println("Playing Track 1");
 	trigger.trackPlaySolo(1);
@@ -2522,12 +2734,6 @@ void setup()
 // =======================================================================================
 //           Main Program Loop - This is the recurring check loop for entire sketch
 // =======================================================================================
-uint32_t currentMillis = 0;
-uint32_t lastMillis = 0;
-uint32_t loopCount;
-uint32_t fastLEDMillis = 0;
-bool wdt_ok = false;
-int buttonStatus = 0;
 
 void loop()
 {
@@ -2535,18 +2741,19 @@ void loop()
 	currentMillis = millis();
 	loopCount++;
 
-	 
+
 
 	//Useful to enable with serial console when having controller issues.
 #ifdef TEST_CONROLLER
 	testPS3Controller();
 #endif
-	if (currentMillis > 10000 && wdt_ok == false) {
+	if ( currentMillis > 6500 && wdt_ok == false ) {
 		//wdt_enable(WDTO_500MS); //enable it, and set it to 500ms
 		wdt_ok = true;
 		Serial.println("WDT Enabled!");
+
 		//
-		// enable  Dome power (at same time as enabling watchdog timer)
+		// enable Dome power same time as watchdog timer
 		//
 		digitalWrite(pinOut_PowerDomeEnableRelay, HIGH);
 
@@ -2556,9 +2763,9 @@ void loop()
 
 	if (stringComplete) {
 		inputString.trim();
-		Serial.println(inputString + ":" + String(soundFileNo));
+		//Serial.println(inputString + ":" + String(soundFileNo));
 		//int mp3fn = atoi(inputString.c_str());
-		Serial1.println(inputString.c_str());
+		ESP8266MeshSerial.println(inputString.c_str());
 #ifdef SOUND_MP3FLASH16P
 		mp3Trigger1.play(mp3fn,mp3Volume);
 #endif
@@ -2583,11 +2790,11 @@ void loop()
 		footMotorDrive();
 		domeMotorDrive();
 		
-		buttonextrafunc();
+		buttonDecoder();
 
 
-		marcDuinoDome();
-		marcDuinoFoot();
+		//marcDuinoDome();
+		//marcDuinoFoot();
 
 		toggleSettings();
 		printOutput();
@@ -2606,7 +2813,7 @@ void loop()
 		}
 	}
 
-	//fastLEDs();
+	fastLEDs();
 
 	if (currentMillis - lastMillis > 1000) {
 		Serial.println("Body Main CM:" + String(currentMillis)
@@ -2641,198 +2848,6 @@ void loop()
 
 	wdt_reset();
 
-}
-
-long buttonMillis = 0;
-
-void buttonextrafunc()
-{
-	if (currentMillis - buttonMillis > 50) {
-		for (int i = 0; i < BUTTONCOUNT; i++) {
-			buttonStatus += (checkButton(&debounceButtons[i]) != 0 ? 1 : 0);
-		}
-		if (buttonStatus != 0) {
-			String butString = "LEFT";
-			int butStatus0 = debounceButtons[psNav_Left].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "UP";
-			butStatus0 = debounceButtons[psNav_UP].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "DOWN";
-			butStatus0 = debounceButtons[psNav_DOWN].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "RIGHT";
-			butStatus0 = debounceButtons[psNav_RIGHT].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "CIRCLE";
-			butStatus0 = debounceButtons[psNav_CIRCLE].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "CROSS";
-			butStatus0 = debounceButtons[psNav_CROSS].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "PS";
-			butStatus0 = debounceButtons[psNav_PS].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-
-			butString = "L3";
-			butStatus0 = debounceButtons[psNav_L3].status;
-			if (butStatus0 == joyButtonClick) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if (butStatus0 == joyButtonDoubleClick) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if (butStatus0 == joyButtonLongHold) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if (butStatus0 == joyButtonHold) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-			butString = "L1";
-			butStatus0 = debounceButtons[psNav_L1].status;
-			if ( butStatus0 == joyButtonClick ) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if ( butStatus0 == joyButtonDoubleClick ) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if ( butStatus0 == joyButtonLongHold ) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if ( butStatus0 == joyButtonHold ) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-			butString = "L2";
-			butStatus0 = debounceButtons[psNav_L2].status;
-			if ( butStatus0 == joyButtonClick ) {
-				Serial.println(butString + ":joyButtonClick");
-			}
-			else
-				if ( butStatus0 == joyButtonDoubleClick ) {
-					Serial.println(butString + ":joyButtonDoubleClick");
-				}
-				else
-					if ( butStatus0 == joyButtonLongHold ) {
-						Serial.println(butString + ":joyButtonLongHold");
-					}
-					else
-						if ( butStatus0 == joyButtonHold ) {
-							Serial.println(butString + ":joyButtonHold");
-						}
-			buttonStatus = 0;
-		}
-		buttonMillis = currentMillis;
-	}
 }
 
 
@@ -3841,7 +3856,7 @@ void marcDuinoButtonPush(int type, int MD_func, int MP3_num, int LD_type, String
 
 			if (panel_type > 1)
 			{
-				Serial1.print(":CL00\r");  // close all the panels prior to next custom routine
+				DomePanelController.print(":CL00\r");  // close all the panels prior to next custom routine
 				delay(50); // give panel close command time to process before starting next panel command 
 			}
 			switch (panel_type)
@@ -4300,7 +4315,7 @@ void marcDuinoFoot()
 	}
 
 	// Clear inbound buffer of any data sent form the MarcDuino board
-	while (Serial1.available()) Serial1.read();
+	while ( DomePanelController.available()) DomePanelController.read();
 	
 	//------------------------------------ 
 	// Send triggers for the base buttons 
@@ -5284,7 +5299,7 @@ void marcDuinoDome()
 	}
 
 	// Clear inbound buffer of any data sent form the MarcDuino board
-	while (Serial1.available()) Serial1.read();
+	while ( DomePanelController.available()) DomePanelController.read();
 
 	//------------------------------------ 
 	// Send triggers for the base buttons 
@@ -6193,7 +6208,7 @@ void custMarcDuinoPanel()
 		if ((DP1_start + (DP1_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP01\r");
+			DomePanelController.print(":OP01\r");
 			DP1_Status = 2;
 		}
 
@@ -6205,7 +6220,7 @@ void custMarcDuinoPanel()
 		if ((DP1_start + ((DP1_s_delay + DP1_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL01\r");
+			DomePanelController.print(":CL01\r");
 			DP1_Status = 0;
 		}
 
@@ -6218,7 +6233,7 @@ void custMarcDuinoPanel()
 		if ((DP2_start + (DP2_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP02\r");
+			DomePanelController.print(":OP02\r");
 			DP2_Status = 2;
 		}
 
@@ -6230,7 +6245,7 @@ void custMarcDuinoPanel()
 		if ((DP2_start + ((DP2_s_delay + DP2_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL02\r");
+			DomePanelController.print(":CL02\r");
 			DP2_Status = 0;
 		}
 
@@ -6243,7 +6258,7 @@ void custMarcDuinoPanel()
 		if ((DP3_start + (DP3_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP03\r");
+			DomePanelController.print(":OP03\r");
 			DP3_Status = 2;
 		}
 
@@ -6255,7 +6270,7 @@ void custMarcDuinoPanel()
 		if ((DP3_start + ((DP3_s_delay + DP3_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL03\r");
+			DomePanelController.print(":CL03\r");
 			DP3_Status = 0;
 		}
 
@@ -6268,7 +6283,7 @@ void custMarcDuinoPanel()
 		if ((DP4_start + (DP4_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP04\r");
+			DomePanelController.print(":OP04\r");
 			DP4_Status = 2;
 		}
 
@@ -6280,7 +6295,7 @@ void custMarcDuinoPanel()
 		if ((DP4_start + ((DP4_s_delay + DP4_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL04\r");
+			DomePanelController.print(":CL04\r");
 			DP4_Status = 0;
 		}
 
@@ -6293,7 +6308,7 @@ void custMarcDuinoPanel()
 		if ((DP5_start + (DP5_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP05\r");
+			DomePanelController.print(":OP05\r");
 			DP5_Status = 2;
 		}
 
@@ -6305,7 +6320,7 @@ void custMarcDuinoPanel()
 		if ((DP5_start + ((DP5_s_delay + DP5_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL05\r");
+			DomePanelController.print(":CL05\r");
 			DP5_Status = 0;
 		}
 
@@ -6318,7 +6333,7 @@ void custMarcDuinoPanel()
 		if ((DP6_start + (DP6_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP06\r");
+			DomePanelController.print(":OP06\r");
 			DP6_Status = 2;
 		}
 
@@ -6330,7 +6345,7 @@ void custMarcDuinoPanel()
 		if ((DP6_start + ((DP6_s_delay + DP6_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL06\r");
+			DomePanelController.print(":CL06\r");
 			DP6_Status = 0;
 		}
 
@@ -6343,7 +6358,7 @@ void custMarcDuinoPanel()
 		if ((DP7_start + (DP7_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP07\r");
+			DomePanelController.print(":OP07\r");
 			DP7_Status = 2;
 		}
 
@@ -6355,7 +6370,7 @@ void custMarcDuinoPanel()
 		if ((DP7_start + ((DP7_s_delay + DP7_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL07\r");
+			DomePanelController.print(":CL07\r");
 			DP7_Status = 0;
 		}
 
@@ -6368,7 +6383,7 @@ void custMarcDuinoPanel()
 		if ((DP8_start + (DP8_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP08\r");
+			DomePanelController.print(":OP08\r");
 			DP8_Status = 2;
 		}
 
@@ -6380,7 +6395,7 @@ void custMarcDuinoPanel()
 		if ((DP8_start + ((DP8_s_delay + DP8_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL08\r");
+			DomePanelController.print(":CL08\r");
 			DP8_Status = 0;
 		}
 
@@ -6393,7 +6408,7 @@ void custMarcDuinoPanel()
 		if ((DP9_start + (DP9_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP09\r");
+			DomePanelController.print(":OP09\r");
 			DP9_Status = 2;
 		}
 
@@ -6405,7 +6420,7 @@ void custMarcDuinoPanel()
 		if ((DP9_start + ((DP9_s_delay + DP9_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL09\r");
+			DomePanelController.print(":CL09\r");
 			DP9_Status = 0;
 		}
 
@@ -6418,7 +6433,7 @@ void custMarcDuinoPanel()
 		if ((DP10_start + (DP10_s_delay * 1000)) < millis())
 		{
 
-			Serial1.print(":OP10\r");
+			DomePanelController.print(":OP10\r");
 			DP10_Status = 2;
 		}
 
@@ -6430,7 +6445,7 @@ void custMarcDuinoPanel()
 		if ((DP10_start + ((DP10_s_delay + DP10_o_time) * 1000)) < millis())
 		{
 
-			Serial1.print(":CL10\r");
+			DomePanelController.print(":CL10\r");
 			DP10_Status = 0;
 		}
 
@@ -7004,7 +7019,7 @@ boolean bCommandIn = false;
 void fastLEDs()
 {
 
-	if (currentMillis - fastLEDMillis > 500) {
+	if (currentMillis - fastLEDMillis > 1000) {
 		//output += "Leds Update\r\n";
 		//statusLED_Power, statusLED_Radio, statusLED_LED3, statusLED_LED4, statusLED_LED5, statusLED_DomePower, statusLED_DriveNav, statusLED_DomeNav, statusLED_Count
 
